@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <base href="/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="Description" content="Demonstration for svg-loading-component">
+
+  <style>
+    :root, html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--ddd-accent-1);
+      text-align: center;
+    }
+    #app {
+      margin: var(--ddd-spacing-2);
+    }
+    un-sdg {
+    margin: var(--ddd-spacing-2);
+    border: var(--ddd-border-md);
+    border-radius: var(--ddd-radius-lg);
+    }
+
+    un-sdg:hover {
+      box-shadow: var(--ddd-boxShadow-sm);
+    }
+
+  </style>
+    
+  <title>UN SDG Web Component</title>
+  <script type="module" src="/src/svg-loading-component.js"></script>
+</head>
+    <body>
+      <div id="app"></div>
+      <button>Change Goal</button>
+  
+      <script>
+        const app = document.querySelector('#app');
+
+        for (let i = 1; i <= 17; i++) {
+          const sdg = document.createElement('un-sdg');
+          sdg.goal = i.toString();
+          app.appendChild(sdg);
+        }
+  
+        const circleSDG = document.createElement('un-sdg');
+        circleSDG.goal = 'circle';
+        app.appendChild(circleSDG);
+  
+        const allSDG = document.createElement('un-sdg');
+        allSDG.goal = 'all';
+        app.appendChild(allSDG);
+  
+        // Demonstrate color-only option
+        const colorOnlySDG = document.createElement('un-sdg');
+        colorOnlySDG.goal = '1';
+        colorOnlySDG.colorOnly = true;
+        app.appendChild(colorOnlySDG);
+  
+        // Add a button to change the goal of the first element
+        const changeGoalButton = document.querySelector('button');
+        changeGoalButton.addEventListener('click', () => {
+          const firstSDG = app.querySelector('un-sdg:first-child');
+          const randomGoal = Math.floor(Math.random() * 17) + 1;
+          firstSDG.goal = randomGoal.toString();
+          colorOnlySDG.goal = randomGoal.toString();
+        });
+      </script>
+    </body>
+  </html>
+  
