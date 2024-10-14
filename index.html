@@ -18,56 +18,89 @@
       margin: var(--ddd-spacing-2);
     }
     un-sdg {
-    margin: var(--ddd-spacing-2);
-    border: var(--ddd-border-md);
-    border-radius: var(--ddd-radius-lg);
+      margin: var(--ddd-spacing-2);
+      border: var(--ddd-border-md);
+      border-radius: var(--ddd-radius-lg);
     }
 
     un-sdg:hover {
       box-shadow: var(--ddd-boxShadow-sm);
     }
 
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .color-only-container {
+      margin-top: 20px;
+    }
   </style>
-    
+
   <title>UN SDG Web Component</title>
   <script type="module" src="/src/svg-loading-component.js"></script>
 </head>
-    <body>
-      <div id="app"></div>
-      <button>Change Goal</button>
-  
-      <script>
-        const app = document.querySelector('#app');
 
-        for (let i = 1; i <= 17; i++) {
-          const sdg = document.createElement('un-sdg');
-          sdg.goal = i.toString();
-          app.appendChild(sdg);
-        }
-  
-        const circleSDG = document.createElement('un-sdg');
-        circleSDG.goal = 'circle';
-        app.appendChild(circleSDG);
-  
-        const allSDG = document.createElement('un-sdg');
-        allSDG.goal = 'all';
-        app.appendChild(allSDG);
-  
-        // Demonstrate color-only option
-        const colorOnlySDG = document.createElement('un-sdg');
-        colorOnlySDG.goal = '1';
-        colorOnlySDG.colorOnly = true;
-        app.appendChild(colorOnlySDG);
-  
-        // Add a button to change the goal of the first element
-        const changeGoalButton = document.querySelector('button');
-        changeGoalButton.addEventListener('click', () => {
-          const firstSDG = app.querySelector('un-sdg:first-child');
-          const randomGoal = Math.floor(Math.random() * 17) + 1;
-          firstSDG.goal = randomGoal.toString();
-          colorOnlySDG.goal = randomGoal.toString();
-        });
-      </script>
-    </body>
-  </html>
-  
+<body>
+  <div id="app">
+    <h2>UN Goals</h2>
+    <div class="container normal-goals"></div>
+
+    <h2>Color Only UN Goals</h2>
+    <div class="container color-only-container"></div>
+
+    <h2>Random</h2>
+    <div class="container">
+      <un-sdg class="random-sdg" goal="1"></un-sdg>
+      <un-sdg class="random-color" goal="1" colorOnly></un-sdg>
+    </div>
+
+    <button class="random-button">Randomize Goal</button>
+  </div>
+
+  <script>
+    const app = document.querySelector('#app');
+    const normalGoalsContainer = document.querySelector('.normal-goals');
+    const colorOnlyContainer = document.querySelector('.color-only-container');
+
+    // Add all normal goals
+    for (let i = 1; i <= 17; i++) {
+      const sdg = document.createElement('un-sdg');
+      sdg.goal = i.toString();
+      normalGoalsContainer.appendChild(sdg);
+    }
+
+    // Add color-only goals below the normal ones
+    for (let i = 1; i <= 17; i++) {
+      const colorOnlySdg = document.createElement('un-sdg');
+      colorOnlySdg.goal = i.toString();
+      colorOnlySdg.colorOnly = true;
+      colorOnlyContainer.appendChild(colorOnlySdg);
+    }
+
+    // Add a circle goal and all goal in both sections
+    const circleSDG = document.createElement('un-sdg');
+    circleSDG.goal = 'circle';
+    normalGoalsContainer.appendChild(circleSDG);
+
+    const allSDG = document.createElement('un-sdg');
+    allSDG.goal = 'all';
+    normalGoalsContainer.appendChild(allSDG);
+
+    // Randomize functionality for both normal and color-only SDGs
+    document.querySelector('.random-button').addEventListener('click', () => {
+      const randomNum = Math.floor(Math.random() * 17) + 1;
+
+      const randomSdg = document.querySelector('.random-sdg');
+      const randomColorSdg = document.querySelector('.random-color');
+
+      randomSdg.goal = randomNum.toString();
+      randomColorSdg.goal = randomNum.toString();
+      randomColorSdg.colorOnly = true;
+    });
+  </script>
+</body>
+
+</html>
+

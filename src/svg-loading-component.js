@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
 export class UnSdg extends LitElement {
   static get properties() {
@@ -16,7 +15,7 @@ export class UnSdg extends LitElement {
     return css`
       :host {
         display: inline-block;
-        width: var(--un-sdg-width, 254px); /* allows for image resizing */
+        width: var(--un-sdg-width, 254px);
         height: var(--un-sdg-height, 254px);
 
         /* CSS variables for goal colors */
@@ -49,27 +48,26 @@ export class UnSdg extends LitElement {
         width: 100%;
         height: 100%;
       }
-
     `;
   }
 
   constructor() {
     super();
-    this.goal = '1';  /* sets default values */
+    this.goal = '1';
     this.label = '';
     this.alt = null;
     this.colorOnly = false;
     this._currentSrc = null;
   }
 
-  updated(changedProperties) {  /* checks if the goal has changed when the 'change goal' button is clicked*/
-    if (changedProperties.has('goal')) { /* if the goal number has changed in the first element, this calls the method to update the image accordingly */
+  updated(changedProperties) {
+    if (changedProperties.has('goal')) {
       this.updateGoalImage();
     }
   }
 
-  updateGoalImage() { /* Ensures the image is properly updated, including special cases */
-    if (this.goal === 'all' || this.goal === 'circle') { /* checks if the goal is equal to circle or all to ensure the correct svg is displayed */
+  updateGoalImage() {
+    if (this.goal === 'all' || this.goal === 'circle') {
       this._currentSrc = `/lib/svgs/goal-${this.goal}.svg`;
       this.alt =
         this.goal === 'all'
@@ -77,18 +75,55 @@ export class UnSdg extends LitElement {
           : 'Sustainable Development Goals Circle';
     } else {
       const goalNumber = parseInt(this.goal);
-      if (goalNumber >= 1 && goalNumber <= 17) { /* checks the goal number and determines which image is needed dynamically*/
+      if (goalNumber >= 1 && goalNumber <= 17) {
         this._currentSrc = `/lib/svgs/goal-${goalNumber}.svg`;
         this.alt = `Goal ${goalNumber}`;
       }
     }
   }
 
+  getLabel() {
+    const labels = [
+      "No Poverty",
+      "Zero Hunger",
+      "Good Health and Well-being",
+      "Quality Education",
+      "Gender Equality",
+      "Clean Water and Sanitation",
+      "Affordable and Clean Energy",
+      "Decent Work and Economic Growth",
+      "Industry, Innovation, and Infrastructure",
+      "Reduced Inequalities",
+      "Sustainable Cities and Communities",
+      "Responsible Consumption and Production",
+      "Climate Action",
+      "Life Below Water",
+      "Life on Land",
+      "Peace, Justice, and Strong Institutions",
+      "Partnerships for the Goals"
+    ];
+
+    if (Number.isInteger(Number(this.goal))) {
+      return labels[this.goal - 1];
+    } else if (this.goal === 'all') {
+      return 'All Sustainable Development Goals';
+    } else if (this.goal === 'circle') {
+      return 'Sustainable Development Goals Circle';
+    }
+    return '';
+  }
+
   render() {
-    if (this.colorOnly) { /* takes the goal number and ensures the correct color variable is displayed for the color-only square */
+    if (this.colorOnly) {
       const goalNumber = parseInt(this.goal);
-      if (goalNumber >= 1 && goalNumber <= 17) { /* Specifically checks the goal number for the color*/
-        const colorVar = `--un-sdg-goal-${goalNumber}`;  
+
+      // Render a white block for circle or all goals in color-only mode
+      if (this.goal === 'circle' || this.goal === 'all') {
+        return html`<div class="color-only" style="background-color: white;"></div>`;
+      }
+
+      if (goalNumber >= 1 && goalNumber <= 17) {
+        const colorVar = `--un-sdg-goal-${goalNumber}`;
         return html`<div class="color-only" style="background-color: var(${colorVar});"></div>`;
       }
     }
