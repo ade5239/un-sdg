@@ -67,6 +67,21 @@ export class UnSdg extends LitElement {
     }
   }
 
+  /*         In order to work on vercel the svgs would need to be referenced on a non local location such as this
+getImgSrc() {
+    let baseUrl =
+      'https://raw.githubusercontent.com/ade5239/un-sdg/1a213afa92f3f50abafd47cad6b2c2eb3d4bf673/lib/svgs';
+
+    if (this.goal === 'all' || this.goal === 'circle') {
+      return `${baseUrl}/goal-${this.goal}.svg`;
+    } else {
+      const goalNumber = parseInt(this.goal);
+      if (goalNumber >= 1 && goalNumber <= 17) {
+        return `${baseUrl}/goal-${goalNumber}.svg`;
+      }
+    }
+  } */
+
   updateGoalImage() {
     if (this.goal === 'all' || this.goal === 'circle') {
       this._currentSrc = `/lib/svgs/goal-${this.goal}.svg`;
