@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 export class UnSdg extends LitElement {
   static get properties() {
-    return {
+    return {  //defines the properties for the component
       goal: { type: String, reflect: true },
       label: { type: String },
       colorOnly: { type: Boolean, attribute: 'color-only', reflect: true },
@@ -36,6 +36,8 @@ export class UnSdg extends LitElement {
         --un-sdg-goal-15: #56c02b;
         --un-sdg-goal-16: #00689d;
         --un-sdg-goal-17: #19486a;
+        --un-sdg-goal-circle: #f1f0f0c4;
+        --un-sdg-goal-all: #ffffff;
       }
 
       img {
@@ -51,7 +53,7 @@ export class UnSdg extends LitElement {
     `;
   }
 
-  constructor() {
+  constructor() { //initialize the default property values
     super();
     this.goal = '1';
     this.label = '';
@@ -60,30 +62,35 @@ export class UnSdg extends LitElement {
     this._currentSrc = null;
   }
 
-  updated(changedProperties) {
+  connectedCallback() { //used when an element is added to the DOM
+    super.connectedCallback();
+    this.updateGoalImage(); //calls for the image source when the component is connected
+  }
+
+  updated(changedProperties) { //changes goal's properties and updates the image source when the component is updated
     if (changedProperties.has('goal')) {
       this.updateGoalImage();
     }
   }
 
   updateGoalImage() {
-    if (this.goal === 'all' || this.goal === 'circle') {
-      this._currentSrc = `/lib/svgs/goal-${this.goal}.svg`;
+    this._currentSrc = this.getImgSrc();
+
+    if (this.goal === 'all' || this.goal === 'circle') { //sets the alt text for accessibility
       this.alt =
         this.goal === 'all'
           ? 'All Sustainable Development Goals'
           : 'Sustainable Development Goals Circle';
     } else {
-      const goalNumber = parseInt(this.goal);
+      const goalNumber = parseInt(this.goal); //for goals 1-17 sets the alt text to goal #
       if (goalNumber >= 1 && goalNumber <= 17) {
-        this._currentSrc = `/lib/svgs/goal-${goalNumber}.svg`;
         this.alt = `Goal ${goalNumber}`;
       }
     }
   }
 
   getLabel() {
-    const labels = [
+    const labels = [  //labels corresponding to each goal, returns the label for the current goal
       "No Poverty",
       "Zero Hunger",
       "Good Health and Well-being",
@@ -103,6 +110,7 @@ export class UnSdg extends LitElement {
       "Partnerships for the Goals"
     ];
 
+    //returns the label based on the goal number or special case
     if (Number.isInteger(Number(this.goal))) {
       return labels[this.goal - 1];
     } else if (this.goal === 'all') {
@@ -113,17 +121,32 @@ export class UnSdg extends LitElement {
     return '';
   }
 
-  render() {
-    if (this.colorOnly) {
-      const goalNumber = parseInt(this.goal);
+  getImgSrc() { //gets the image source for the svgs from github library based on the current goal
+    const baseUrl =
+      'https://raw.githubusercontent.com/ade5239/un-sdg/main/lib/svgs';
 
-      // Render a white block for circle or all goals in color-only mode
-      if (this.goal === 'circle' || this.goal === 'all') {
-        return html`<div class="color-only" style="background-color: white;"></div>`;
-      }
-
+    if (this.goal === 'all' || this.goal === 'circle') { //builds the url for special cases
+      return `${baseUrl}/goal-${this.goal}.svg`;
+    } else {
+      const goalNumber = parseInt(this.goal); //builds the url for goals 1-17
       if (goalNumber >= 1 && goalNumber <= 17) {
-        const colorVar = `--un-sdg-goal-${goalNumber}`;
+        return `${baseUrl}/goal-${goalNumber}.svg`;
+      }
+    }
+  }
+  
+
+  render() {
+    if (this.colorOnly) {  
+      // Handle 'circle' and 'all' goals
+      if (this.goal === 'circle' || this.goal === 'all') {
+        const colorVar = `--un-sdg-goal-${this.goal}`; //sets the background color for the square based on the corresponding css variable
+        return html`<div class="color-only" style="background-color: var(${colorVar});"></div>`;
+      }
+  
+      const goalNumber = parseInt(this.goal); //Handles the normal 1-17 goals
+      if (goalNumber >= 1 && goalNumber <= 17) {
+        const colorVar = `--un-sdg-goal-${goalNumber}`; //sets the background color for the square based on the corresponding css variable
         return html`<div class="color-only" style="background-color: var(${colorVar});"></div>`;
       }
     }

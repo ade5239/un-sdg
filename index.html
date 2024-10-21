@@ -53,24 +53,34 @@
     <h2>Random</h2>
     <div class="container">
       <un-sdg class="random-sdg" goal="1"></un-sdg>
-      <un-sdg class="random-color" goal="1" colorOnly></un-sdg>
+      <un-sdg class="random-color" goal="1" color-only></un-sdg>
     </div>
-
+    
     <button class="random-button">Randomize Goal</button>
+    
   </div>
 
   <script>
     const app = document.querySelector('#app');
     const normalGoalsContainer = document.querySelector('.normal-goals');
     const colorOnlyContainer = document.querySelector('.color-only-container');
-
+  
     // Add all normal goals
     for (let i = 1; i <= 17; i++) {
       const sdg = document.createElement('un-sdg');
       sdg.goal = i.toString();
       normalGoalsContainer.appendChild(sdg);
     }
-
+  
+    // Add 'circle' and 'all' goals to normal goals
+    const circleSDG = document.createElement('un-sdg');
+    circleSDG.goal = 'circle';
+    normalGoalsContainer.appendChild(circleSDG);
+  
+    const allSDG = document.createElement('un-sdg');
+    allSDG.goal = 'all';
+    normalGoalsContainer.appendChild(allSDG);
+  
     // Add color-only goals below the normal ones
     for (let i = 1; i <= 17; i++) {
       const colorOnlySdg = document.createElement('un-sdg');
@@ -78,23 +88,25 @@
       colorOnlySdg.colorOnly = true;
       colorOnlyContainer.appendChild(colorOnlySdg);
     }
-
-    // Add a circle goal and all goal in both sections
-    const circleSDG = document.createElement('un-sdg');
-    circleSDG.goal = 'circle';
-    normalGoalsContainer.appendChild(circleSDG);
-
-    const allSDG = document.createElement('un-sdg');
-    allSDG.goal = 'all';
-    normalGoalsContainer.appendChild(allSDG);
-
+  
+    // Add 'circle' and 'all' goals to color-only container
+    const colorOnlyCircleSDG = document.createElement('un-sdg');
+    colorOnlyCircleSDG.goal = 'circle';
+    colorOnlyCircleSDG.colorOnly = true;
+    colorOnlyContainer.appendChild(colorOnlyCircleSDG);
+  
+    const colorOnlyAllSDG = document.createElement('un-sdg');
+    colorOnlyAllSDG.goal = 'all';
+    colorOnlyAllSDG.colorOnly = true;
+    colorOnlyContainer.appendChild(colorOnlyAllSDG);
+  
     // Randomize functionality for both normal and color-only SDGs
     document.querySelector('.random-button').addEventListener('click', () => {
       const randomNum = Math.floor(Math.random() * 17) + 1;
-
+  
       const randomSdg = document.querySelector('.random-sdg');
       const randomColorSdg = document.querySelector('.random-color');
-
+  
       randomSdg.goal = randomNum.toString();
       randomColorSdg.goal = randomNum.toString();
       randomColorSdg.colorOnly = true;
@@ -103,4 +115,3 @@
 </body>
 
 </html>
-
